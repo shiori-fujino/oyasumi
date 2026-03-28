@@ -9,7 +9,7 @@ type FeedPost = {
 };
 
 async function getFeed(): Promise<FeedPost[]> {
-  const res = await fetch("http://127.0.0.1:8000/api/feed/", {
+  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
     cache: "no-store",
   });
 

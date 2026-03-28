@@ -19,7 +19,7 @@ export default function EditPage() {
     async function fetchPost() {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/board/${slug}/`,
+          `https://oyasumi-vi2k.onrender.com//api/board/${slug}/`,
           { cache: "no-store" }
         );
 
@@ -47,7 +47,7 @@ export default function EditPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `http://127.0.0.1:8000/api/board/${postId}/edit/`,
+        `https://oyasumi-vi2k.onrender.com//api/board/${postId}/edit/`,
         {
           method: "PATCH",
           headers: {

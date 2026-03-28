@@ -17,7 +17,7 @@ type FeedPost = {
 };
 
 async function getPopularPosts(): Promise<BoardPost[]> {
-  const res = await fetch("http://127.0.0.1:8000/api/board/?sort=views&page=1", {
+  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/board/?sort=views&page=1", {
     cache: "no-store",
   });
 
@@ -28,7 +28,7 @@ async function getPopularPosts(): Promise<BoardPost[]> {
 }
 
 async function getLatestFeed(): Promise<FeedPost[]> {
-  const res = await fetch("http://127.0.0.1:8000/api/feed/", {
+  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
     cache: "no-store",
   });
 

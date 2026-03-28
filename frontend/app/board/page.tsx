@@ -36,7 +36,7 @@ async function getPosts(sort: string, category: string, page: number): Promise<B
       page: String(page),
     });
 
-    const res = await fetch(`http://127.0.0.1:8000/api/board/?${params.toString()}`, {
+    const res = await fetch(`https://oyasumi-vi2k.onrender.com//api/board/?${params.toString()}`, {
       cache: "no-store",
     });
 

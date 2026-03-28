@@ -24,7 +24,7 @@ export default function FeedUploadPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://127.0.0.1:8000/api/feed/", {
+      const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
   method: "POST",
   headers: {
     Authorization: `Token ${token}`,

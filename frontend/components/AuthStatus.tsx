@@ -18,7 +18,7 @@ export default function AuthStatus() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/me/", {
+        const res = await fetch("https://oyasumi-vi2k.onrender.com//api/me/", {
           headers: {
             Authorization: `Token ${token}`,
           },

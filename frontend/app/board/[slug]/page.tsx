@@ -14,7 +14,7 @@ type BoardDetail = {
 };
 
 async function getPost(slug: string): Promise<BoardDetail | null> {
-  const res = await fetch(`http://127.0.0.1:8000/api/board/${slug}/`, {
+  const res = await fetch(`https://oyasumi-vi2k.onrender.com//api/board/${slug}/`, {
     cache: "no-store",
   });
 

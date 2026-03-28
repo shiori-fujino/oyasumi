@@ -34,9 +34,11 @@ export default function FeedUploadPage() {
 });
 
       if (!res.ok) {
-        alert("upload failed");
-        return;
-      }
+  const text = await res.text();
+  console.log("upload failed:", text);
+  alert(text || "upload failed");
+  return;
+}
 
       router.push("/feed");
     } catch (err) {

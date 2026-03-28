@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Juno App",
+  title: "おやすみクラブ🌙",
   description: "feed + experiments",
 };
 

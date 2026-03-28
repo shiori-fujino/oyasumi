@@ -31,7 +31,7 @@ export default function LoginPage() {
       }
 
       localStorage.setItem("token", data.token);
-      router.push("/profile");
+      window.location.href = "/profile";
     } catch (error) {
       console.error(error);
       alert("Something went wrong");

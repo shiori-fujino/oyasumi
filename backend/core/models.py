@@ -4,6 +4,8 @@ from datetime import timedelta
 from django.utils import timezone
 from django.utils.text import slugify
 
+def default_expires_at():
+    return timezone.now() + timedelta(hours=24)
 
 class Profile(models.Model):
     ROLE_CHOICES = [
@@ -50,12 +52,7 @@ class BoardPost(models.Model):
 
 class FeedPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="feed/", null=True, blank=True)    
+    image = models.ImageField(upload_to="feed/", null=True, blank=True)
     caption = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-
-    def save(self, *args, **kwargs):
-        if not self.expires_at:
-            self.expires_at = timezone.now() + timedelta(hours=24)
-        super().save(*args, **kwargs)
+    expires_at = models.DateTimeField(default=default_expires_at)

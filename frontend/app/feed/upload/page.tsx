@@ -26,34 +26,36 @@ export default function FeedUploadPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(`${API_BASE}/api/feed/`, {
-  method: "POST",
-  headers: {
-    Authorization: `Token ${token}`,
-  },
-  body: formData,
-});
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        body: formData,
+      });
+
+      console.log("status:", res.status);
+
+      const text = await res.text();
+      console.log("response text:", text);
 
       if (!res.ok) {
-  const text = await res.text();
-  console.log("upload failed:", text);
-  alert(text || "upload failed");
-  return;
-}
+        alert(text || "upload failed");
+        return;
+      }
 
       router.push("/feed");
     } catch (err) {
-      console.error(err);
+      console.error("upload catch error:", err);
+      alert("fetch failed before response body was handled");
     }
   }
 
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
       <div className="mx-auto w-[92%] max-w-md py-10 space-y-6">
-
         <h1 className="text-[18px] font-medium">Upload</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             type="file"
             accept="image/*"
@@ -67,13 +69,9 @@ export default function FeedUploadPage() {
             className="w-full border border-[#ddd6cc] px-3 py-2 text-sm"
           />
 
-          <button
-            type="submit"
-            className="text-sm text-[#5f5a54]"
-          >
+          <button type="submit" className="text-sm text-[#5f5a54]">
             Upload
           </button>
-
         </form>
       </div>
     </main>

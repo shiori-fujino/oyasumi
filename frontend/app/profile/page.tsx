@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 type MyPost = {
   id: number;
@@ -61,7 +62,7 @@ export default function ProfilePage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("https://oyasumi-vi2k.onrender.com//api/my-posts/", {
+        const res = await fetch(`${API_BASE}/api/my-posts/`, {
           cache: "no-store",
           headers: token
             ? {

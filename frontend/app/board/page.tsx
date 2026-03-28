@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AuthStatus from "@/components/AuthStatus";
 import PostAccessNote from "@/components/PostAccessNote";
+import { API_BASE } from "@/lib/api";
 
 type BoardPost = {
   id: number;
@@ -36,7 +37,7 @@ async function getPosts(sort: string, category: string, page: number): Promise<B
       page: String(page),
     });
 
-    const res = await fetch(`https://oyasumi-vi2k.onrender.com//api/board/?${params.toString()}`, {
+    const res = await fetch(`${API_BASE}/api/board/?${params.toString()}`, {
       cache: "no-store",
     });
 

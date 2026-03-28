@@ -2,6 +2,8 @@
 
 import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
+
 
 export default function BoardWritePage() {
   const router = useRouter();
@@ -36,7 +38,7 @@ export default function BoardWritePage() {
       }
 
       try {
-        const res = await fetch("https://oyasumi-vi2k.onrender.com//api/me/", {
+        const res = await fetch(`${API_BASE}/api/me/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -99,7 +101,7 @@ export default function BoardWritePage() {
         return;
       }
 
-      const res = await fetch("https://oyasumi-vi2k.onrender.com//api/board/", {
+      const res = await fetch(`${API_BASE}/api/board/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

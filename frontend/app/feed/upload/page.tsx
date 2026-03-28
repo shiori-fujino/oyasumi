@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 export default function FeedUploadPage() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function FeedUploadPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
+      const res = await fetch(`${API_BASE}/api/feed/`, {
   method: "POST",
   headers: {
     Authorization: `Token ${token}`,

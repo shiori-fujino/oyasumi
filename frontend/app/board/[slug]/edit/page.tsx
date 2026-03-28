@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 export default function EditPage() {
   const params = useParams();
@@ -19,7 +20,7 @@ export default function EditPage() {
     async function fetchPost() {
       try {
         const res = await fetch(
-          `https://oyasumi-vi2k.onrender.com//api/board/${slug}/`,
+          `${API_BASE}/api/board/${slug}/`,
           { cache: "no-store" }
         );
 
@@ -47,7 +48,7 @@ export default function EditPage() {
       const token = localStorage.getItem("token");
 
       const res = await fetch(
-        `https://oyasumi-vi2k.onrender.com//api/board/${postId}/edit/`,
+        `${API_BASE}/api/board/${postId}/edit/`,
         {
           method: "PATCH",
           headers: {

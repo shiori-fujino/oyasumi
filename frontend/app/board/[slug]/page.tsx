@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { API_BASE } from "@/lib/api";
 
 type BoardDetail = {
   id: number;
@@ -14,7 +15,7 @@ type BoardDetail = {
 };
 
 async function getPost(slug: string): Promise<BoardDetail | null> {
-  const res = await fetch(`https://oyasumi-vi2k.onrender.com//api/board/${slug}/`, {
+  const res = await fetch(`${API_BASE}/api/board/${slug}/`, {
     cache: "no-store",
   });
 

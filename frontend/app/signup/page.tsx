@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://oyasumi-vi2k.onrender.com//api/signup/", {
+      const res = await fetch(`${API_BASE}/api/signup/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

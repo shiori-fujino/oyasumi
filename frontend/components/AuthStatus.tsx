@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { API_BASE } from "@/lib/api";
 
 type Me = {
   id: number;
@@ -18,7 +19,7 @@ export default function AuthStatus() {
       if (!token) return;
 
       try {
-        const res = await fetch("https://oyasumi-vi2k.onrender.com//api/me/", {
+        const res = await fetch(`${API_BASE}/api/me/`, {
           headers: {
             Authorization: `Token ${token}`,
           },

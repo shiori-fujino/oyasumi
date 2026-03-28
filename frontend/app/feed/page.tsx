@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { API_BASE } from "@/lib/api";
 
 type FeedPost = {
   id: number;
@@ -9,7 +10,7 @@ type FeedPost = {
 };
 
 async function getFeed(): Promise<FeedPost[]> {
-  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
+  const res = await fetch(`${API_BASE}/api/feed/`, {
     cache: "no-store",
   });
 

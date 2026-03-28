@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { API_BASE } from "@/lib/api";
 
 type BoardPost = {
   id: number;
@@ -17,7 +18,7 @@ type FeedPost = {
 };
 
 async function getPopularPosts(): Promise<BoardPost[]> {
-  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/board/?sort=views&page=1", {
+  const res = await fetch(`${API_BASE}/api/board/?sort=views&page=1`, {
     cache: "no-store",
   });
 
@@ -28,7 +29,7 @@ async function getPopularPosts(): Promise<BoardPost[]> {
 }
 
 async function getLatestFeed(): Promise<FeedPost[]> {
-  const res = await fetch("https://oyasumi-vi2k.onrender.com//api/feed/", {
+  const res = await fetch(`${API_BASE}/api/feed/`, {
     cache: "no-store",
   });
 

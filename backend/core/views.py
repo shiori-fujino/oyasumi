@@ -132,7 +132,7 @@ def board_list(request):
         page = int(request.GET.get("page", 1))
         page_size = 10
 
-        posts = BoardPost.objects.filter(status="approved")
+        posts = BoardPost.objects.public_visible()
 
         if category != "all":
             posts = posts.filter(category=category)
@@ -241,6 +241,13 @@ def board_detail(request, slug):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    if post.category == "promo" and post.is_expired():
+        if not request.user.is_authenticated or post.author != request.user:
+            return Response(
+                {"error": "Post not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
     post.views = F("views") + 1
     post.save(update_fields=["views"])
     post.refresh_from_db()
@@ -290,6 +297,8 @@ def feed_list(request):
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["POST"])
 def login_view(request):
     username = request.data.get("username", "").strip()

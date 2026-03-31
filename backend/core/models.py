@@ -4,8 +4,10 @@ from datetime import timedelta
 from django.utils import timezone
 from django.utils.text import slugify
 
+
 def default_expires_at():
     return timezone.now() + timedelta(hours=24)
+
 
 class Profile(models.Model):
     ROLE_CHOICES = [
@@ -16,6 +18,18 @@ class Profile(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+
+
+class BoardPostQuerySet(models.QuerySet):
+    def active(self):
+        now = timezone.now()
+        return self.filter(
+            models.Q(category="promo", expires_at__gt=now) |
+            ~models.Q(category="promo")
+        )
+
+    def public_visible(self):
+        return self.filter(status="approved").active()
 
 
 class BoardPost(models.Model):
@@ -33,6 +47,7 @@ class BoardPost(models.Model):
     body = models.TextField()
     views = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
 
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -41,9 +56,27 @@ class BoardPost(models.Model):
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
+    objects = BoardPostQuerySet.as_manager()
+
+    def is_expired(self):
+        return (
+            self.category == "promo"
+            and self.expires_at is not None
+            and self.expires_at <= timezone.now()
+        )
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+
+        if self.category == "promo":
+            if self.created_at:
+                self.expires_at = self.created_at + timedelta(days=7)
+            elif not self.expires_at:
+                self.expires_at = timezone.now() + timedelta(days=7)
+        else:
+            self.expires_at = None
+
         super().save(*args, **kwargs)
 
     def __str__(self):

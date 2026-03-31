@@ -25,6 +25,7 @@ class FeedPostCreateSerializer(serializers.ModelSerializer):
 
 class BoardListSerializer(serializers.ModelSerializer):
     pretty_slug = serializers.SerializerMethodField()
+    is_expired = serializers.SerializerMethodField()
 
     class Meta:
         model = BoardPost
@@ -34,6 +35,8 @@ class BoardListSerializer(serializers.ModelSerializer):
             "title",
             "pretty_slug",
             "created_at",
+            "expires_at",
+            "is_expired",
             "views",
             "status",
         ]
@@ -42,10 +45,14 @@ class BoardListSerializer(serializers.ModelSerializer):
         title_slug = slugify(obj.title) or "post"
         return f"{obj.id}-{title_slug}"
 
+    def get_is_expired(self, obj):
+        return obj.is_expired()
+
 
 class BoardDetailSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source="author.username", read_only=True)
     pretty_slug = serializers.SerializerMethodField()
+    is_expired = serializers.SerializerMethodField()
 
     class Meta:
         model = BoardPost
@@ -58,6 +65,8 @@ class BoardDetailSerializer(serializers.ModelSerializer):
             "author",
             "author_username",
             "created_at",
+            "expires_at",
+            "is_expired",
             "views",
             "status",
         ]
@@ -65,6 +74,9 @@ class BoardDetailSerializer(serializers.ModelSerializer):
     def get_pretty_slug(self, obj):
         title_slug = slugify(obj.title) or "post"
         return f"{obj.id}-{title_slug}"
+
+    def get_is_expired(self, obj):
+        return obj.is_expired()
 
 
 class BoardWriteSerializer(serializers.ModelSerializer):

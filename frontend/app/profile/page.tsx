@@ -181,7 +181,36 @@ export default function ProfilePage() {
       setSaving(false);
     }
   }
+async function handleDeletePost(postId: number) {
+  const ok = window.confirm("Delete this post?");
+  if (!ok) return;
 
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_BASE}/api/board/${postId}/delete/`, {
+      method: "DELETE",
+      headers: token
+        ? {
+            Authorization: `Token ${token}`,
+          }
+        : {},
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      alert(data?.error || data?.detail || "Failed to delete post.");
+      return;
+    }
+
+    setPosts((prev) => prev.filter((post) => post.id !== postId));
+    alert("Post deleted.");
+  } catch (error) {
+    console.error("Failed to delete post:", error);
+    alert("Something went wrong.");
+  }
+}
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
       <div className="mx-auto w-[92%] max-w-4xl py-8 md:w-[86%] md:py-12">
@@ -346,7 +375,13 @@ export default function ProfilePage() {
                       className="ml-1 text-[11px] text-[#8e8a84]"
                     >
                       Edit
-                    </Link>
+                    </Link><button
+  type="button"
+  onClick={() => handleDeletePost(post.id)}
+  className="text-[11px] text-[#c78fa0]"
+>
+  Delete
+</button>
                   </div>
                 </div>
               );

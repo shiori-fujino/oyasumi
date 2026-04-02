@@ -123,6 +123,12 @@ def edit_post(request, post_id):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    if post.status == "deleted":
+        return Response(
+            {"error": "Post not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     if post.author != request.user:
         return Response(
             {"error": "Not allowed"},
@@ -145,7 +151,6 @@ def edit_post(request, post_id):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 @api_view(["POST"])
 def approve_post(request, post_id):
     if not request.user.is_staff:
@@ -155,6 +160,12 @@ def approve_post(request, post_id):
         post = BoardPost.objects.get(id=post_id)
     except BoardPost.DoesNotExist:
         return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if post.status == "deleted":
+        return Response(
+            {"error": "Cannot approve deleted post"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     post.status = "approved"
     post.save(update_fields=["status"])
@@ -166,7 +177,12 @@ class MyPostsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        posts = BoardPost.objects.filter(author=request.user).order_by("-created_at")
+        posts = (
+            BoardPost.objects
+            .filter(author=request.user)
+            .exclude(status="deleted")
+            .order_by("-created_at")
+        )
         serializer = BoardListSerializer(posts, many=True)
         return Response(serializer.data)
 
@@ -290,6 +306,12 @@ def board_detail(request, slug):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    if post.status == "deleted":
+        return Response(
+            {"error": "Post not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     if post.category == "promo" and post.is_expired():
         if not request.user.is_authenticated or post.author != request.user:
             return Response(
@@ -391,3 +413,32 @@ def me_view(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+@api_view(["DELETE"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_post(request, post_id):
+    try:
+        post = BoardPost.objects.get(id=post_id)
+    except BoardPost.DoesNotExist:
+        return Response(
+            {"error": "Post not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    if post.author != request.user:
+        return Response(
+            {"error": "Not allowed"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    if post.status == "deleted":
+        return Response(
+            {"error": "Post already deleted"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    post.status = "deleted"
+    post.save(update_fields=["status"])
+
+    return Response({"message": "Deleted successfully"})

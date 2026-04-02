@@ -10,6 +10,7 @@ from .views import (
     login_view,
     VerifyEmailView,
     ResendVerificationView,
+    delete_post,
 )
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     path("signup/", SignupView.as_view(), name="signup"),
     path("my-posts/", MyPostsView.as_view()),
     path("board/<int:post_id>/edit/", edit_post),
+    path("board/<int:post_id>/delete/", delete_post),
 ]

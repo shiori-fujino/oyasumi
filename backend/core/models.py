@@ -64,6 +64,7 @@ class BoardPost(models.Model):
         ("pending", "Pending"),
         ("approved", "Approved"),
         ("rejected", "Rejected"),
+        ("deleted", "Deleted"),
     ]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 

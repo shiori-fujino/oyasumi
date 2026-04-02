@@ -24,7 +24,10 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".onrender.com"]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://oyasumi-gules.vercel.app",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     "django.contrib.admin",

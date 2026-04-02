@@ -22,6 +22,7 @@ from .serializers import (
     BoardWriteSerializer,
     BoardEditSerializer,
     SignupSerializer,
+    ProfileSerializer,
 )
 from .utils import send_verification_email
 
@@ -373,16 +374,20 @@ def login_view(request):
     )
 
 
-@api_view(["GET"])
+@api_view(["GET", "PATCH"])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def me_view(request):
-    profile = Profile.objects.filter(user=request.user).first()
-
-    return Response(
-        {
-            "id": request.user.id,
-            "username": request.user.username,
-            "role": profile.role if profile else None,
-        }
+    profile, _ = Profile.objects.get_or_create(
+        user=request.user,
+        defaults={"role": "client"},
     )
+
+    if request.method == "GET":
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+
+    serializer = ProfileSerializer(profile, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)

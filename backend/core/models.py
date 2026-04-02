@@ -16,8 +16,19 @@ class Profile(models.Model):
         ("client", "Client"),
         ("girl", "Girl"),
     ]
+    WORK_CATEGORY_CHOICES = [
+        ("ktv", "KTV"),
+        ("massage", "Massage"),
+        ("full_service", "Full Service"),
+        ("escort", "Escort"),
+        ("independent", "Independent"),
+    ]
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    work_category = models.CharField(max_length=30, choices=WORK_CATEGORY_CHOICES, blank=True)
+    location = models.TextField(blank=True)
+    bio = models.TextField(blank=True)
 
 
 class BoardPostQuerySet(models.QuerySet):

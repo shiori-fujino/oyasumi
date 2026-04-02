@@ -8,6 +8,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("client");
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,7 @@ export default function SignupPage() {
         },
         body: JSON.stringify({
           username,
+          email,
           password,
           role,
         }),
@@ -32,11 +34,15 @@ export default function SignupPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Signup failed");
+        alert(
+          data.error ||
+            data.detail ||
+            (typeof data === "object" ? JSON.stringify(data) : "Signup failed")
+        );
         return;
       }
 
-      alert("Signup successful. Please login.");
+      alert("Signup successful. Please check your email to verify your account.");
       router.push("/login");
     } catch (error) {
       console.error(error);
@@ -57,6 +63,18 @@ export default function SignupPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full border-b py-2 outline-none"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs text-gray-500">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border-b py-2 outline-none"
+            required
           />
         </div>
 
@@ -67,6 +85,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full border-b py-2 outline-none"
+            required
           />
         </div>
 
@@ -83,6 +102,10 @@ export default function SignupPage() {
             <option value="admin">Admin</option>
           </select>
         </div>
+
+        <p className="text-xs text-gray-500">
+          Once you choose your role, you can’t change it later, so choose carefully.
+        </p>
 
         <div className="flex justify-end">
           <button type="submit" disabled={loading} className="text-sm underline">

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.utils.text import slugify
-from .models import FeedPost, BoardPost
+from django.contrib.auth.models import User
+
+from .models import FeedPost, BoardPost, Profile
 
 
 class FeedPostSerializer(serializers.ModelSerializer):
@@ -89,3 +91,47 @@ class BoardEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardPost
         fields = ["title", "body"]
+
+
+class SignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    role = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password", "role"]
+
+    def validate_role(self, value):
+        allowed_roles = ["admin", "shop", "client", "girl"]
+        if value not in allowed_roles:
+            raise serializers.ValidationError("Invalid role.")
+        return value
+
+    def validate_email(self, value):
+        email = value.strip().lower()
+        if not email:
+            raise serializers.ValidationError("Email is required.")
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError("Email already exists.")
+        return email
+
+    def validate_username(self, value):
+        username = value.strip()
+        if not username:
+            raise serializers.ValidationError("Username is required.")
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError("Username already exists.")
+        return username
+
+    def create(self, validated_data):
+        role = validated_data.pop("role")
+
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            password=validated_data["password"],
+            is_active=False,
+        )
+
+        Profile.objects.create(user=user, role=role)
+        return user

@@ -48,30 +48,7 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
       <div className="mx-auto w-[92%] max-w-5xl py-10 space-y-14">
-        <section className="space-y-4">
-          <h1 className="text-3xl font-semibold text-[#4f4a45]">
-            Board & Feed
-          </h1>
-          <p className="text-sm text-[#7a7268]">
-            community posts, updates, and daily moments
-          </p>
-
-          <div className="flex gap-3 pt-2">
-            <Link
-              href="/board"
-              className="px-4 py-2 text-sm bg-[#3f3a35] text-white"
-            >
-              Browse Board
-            </Link>
-
-            <Link
-              href="/signup"
-              className="px-4 py-2 text-sm border border-[#ccc]"
-            >
-              Join now
-            </Link>
-          </div>
-        </section>
+        
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">

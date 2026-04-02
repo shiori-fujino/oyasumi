@@ -1,11 +1,24 @@
 from pathlib import Path
 import os
+import django
 import dj_database_url
 from dotenv import load_dotenv
 
+EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.resend.com"
+
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "resend"
+EMAIL_HOST_PASSWORD="re_ApqbuGhP_DmCX1PAZwam7pQTLfeZeH3fo"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = "onboarding@resend.dev"
+
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DEBUG", "True") == "True"

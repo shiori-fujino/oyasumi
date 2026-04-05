@@ -77,7 +77,16 @@ class VerifyEmailView(APIView):
             user.is_active = True
             user.save(update_fields=["is_active"])
 
-        return Response({"message": "Email verified successfully."})
+        auth_token, _ = Token.objects.get_or_create(user=user)
+
+        return Response(
+            {
+                "message": "Email verified successfully.",
+                "token": auth_token.key,
+                "username": user.username,
+                "role": getattr(user, "role", None),
+            }
+        )
 
 
 class ResendVerificationView(APIView):

@@ -53,7 +53,7 @@ export default async function HomePage() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
            <h2 className="text-[18px] text-[#4f4a45]">
-  <span className="soft-bob inline-block">Hot Posts ♡</span>
+  Hot Posts ♡
 </h2>
             <Link href="/board" className="text-sm text-[#8b847b] hover:text-[#4f4a45]">
               View all
@@ -83,7 +83,7 @@ export default async function HomePage() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
            <h2 className="text-[18px] text-[#4f4a45]">
-  New Feed <span className="soft-pulse">♡</span>
+  New Feed ♡
 </h2>
             <Link href="/feed" className="text-sm text-[#8b847b] hover:text-[#4f4a45]">
               View all
@@ -91,7 +91,13 @@ export default async function HomePage() {
           </div>
 
           {feeds.length === 0 ? (
-            <p className="text-sm text-[#999]">Please log in to check what's HOT today.</p>
+            <p className="text-sm text-[#999]">
+  Please{" "}
+  <Link href="/login" className="underline hover:text-[#4f4a45]">
+    log in
+  </Link>{" "}
+  to check what's HOT today.
+</p>
           ) : (
             <div className="grid grid-cols-3 gap-2">
               {feeds.map((post) => (
@@ -110,27 +116,7 @@ export default async function HomePage() {
           )}
         </section>
 
-        <section className="border-t border-[#e8e1d8] pt-6 text-center space-y-3">
-          <p className="text-sm text-[#7a7268]">
-            Join to write posts and upload your own feed.
-          </p>
-
-          <div className="flex justify-center gap-3">
-            <Link
-              href="/signup"
-              className="px-4 py-2 text-sm bg-[#6bc224] text-white"
-            >
-              Sign Up
-            </Link>
-
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm border border-[#ccc]"
-            >
-              Log In
-            </Link>
-          </div>
-        </section>
+        
       </div>
     </main>
   );

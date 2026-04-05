@@ -26,7 +26,20 @@ from .serializers import (
 )
 from .utils import send_verification_email
 
+@api_view(["GET"])
+def featured_posts(request):
+    posts = (
+        BoardPost.objects.public_visible()
+        .filter(is_featured=True, thumbnail__isnull=False)
+        .order_by("-created_at")[:3]
+    )
 
+    serializer = BoardListSerializer(
+        posts,
+        many=True,
+        context={"request": request},
+    )
+    return Response(serializer.data)
 class SignupView(APIView):
     permission_classes = []
 
@@ -203,7 +216,11 @@ class MyPostsView(APIView):
             .exclude(status="deleted")
             .order_by("-created_at")
         )
-        serializer = BoardListSerializer(posts, many=True)
+        serializer = BoardListSerializer(
+            posts, 
+            many=True,
+            context={"request": request}, 
+            )
         return Response(serializer.data)
 
 
@@ -343,7 +360,7 @@ def board_detail(request, slug):
     post.save(update_fields=["views"])
     post.refresh_from_db()
 
-    serializer = BoardDetailSerializer(post)
+    serializer = BoardDetailSerializer(post, context={"request": request})
     return Response(serializer.data)
 
 

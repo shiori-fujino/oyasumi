@@ -37,6 +37,7 @@ class FeedPostCreateSerializer(serializers.ModelSerializer):
 class BoardListSerializer(serializers.ModelSerializer):
     pretty_slug = serializers.SerializerMethodField()
     is_expired = serializers.SerializerMethodField()
+    thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = BoardPost
@@ -45,6 +46,7 @@ class BoardListSerializer(serializers.ModelSerializer):
             "category",
             "title",
             "pretty_slug",
+            "thumbnail",
             "created_at",
             "expires_at",
             "is_expired",
@@ -58,12 +60,20 @@ class BoardListSerializer(serializers.ModelSerializer):
 
     def get_is_expired(self, obj):
         return obj.is_expired()
+    def get_thumbnail(self, obj):
+        request = self.context.get("request")
+        if obj.thumbnail:
+            if request:
+                return request.build_absolute_uri(obj.thumbnail.url)
+            return obj.thumbnail.url
+        return None
 
 
 class BoardDetailSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source="author.username", read_only=True)
     pretty_slug = serializers.SerializerMethodField()
     is_expired = serializers.SerializerMethodField()
+    thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = BoardPost
@@ -72,6 +82,7 @@ class BoardDetailSerializer(serializers.ModelSerializer):
             "category",
             "title",
             "pretty_slug",
+            "thumbnail",
             "body",
             "author",
             "author_username",
@@ -88,12 +99,17 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
     def get_is_expired(self, obj):
         return obj.is_expired()
+    def get_thumbnail(self, obj):
+        request = self.context.get("request")
+        if obj.thumbnail:
+            return request.build_absolute_uri(obj.thumbnail.url)
+        return None
 
 
 class BoardWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardPost
-        fields = ["author", "category", "title", "body"]
+        fields = ["author", "category", "title", "body", "thumbnail"]
 
 
 class BoardEditSerializer(serializers.ModelSerializer):

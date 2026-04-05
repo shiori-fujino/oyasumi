@@ -11,11 +11,15 @@ from .views import (
     VerifyEmailView,
     ResendVerificationView,
     delete_post,
+    featured_posts,
 )
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path("feed/", feed_list),
     path("board/", board_list),
+    path("board/featured/", featured_posts),
     path("board/<str:slug>/", board_detail),
     path("login/", login_view, name="login"),
     path("me/", me_view),
@@ -25,4 +29,8 @@ urlpatterns = [
     path("my-posts/", MyPostsView.as_view()),
     path("board/<int:post_id>/edit/", edit_post),
     path("board/<int:post_id>/delete/", delete_post),
+    
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

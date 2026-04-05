@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { API_BASE } from "@/lib/api";
 import HomeFeedSection from "./HomeFeedSection";
+import FeaturedCarousel from "./FeaturedCarousel";
 
 type BoardPost = {
   id: number;
@@ -9,6 +10,17 @@ type BoardPost = {
   category: string;
   views: number;
   created_at: string;
+  pretty_slug: string;
+};
+
+type FeaturedPost = {
+  id: number;
+  title: string;
+  category: string;
+  views: number;
+  created_at: string;
+  pretty_slug: string;
+  thumbnail: string | null;
 };
 
 type FeedPost = {
@@ -17,6 +29,15 @@ type FeedPost = {
   caption?: string;
   created_at: string;
 };
+
+async function getFeaturedPosts(): Promise<FeaturedPost[]> {
+  const res = await fetch(`${API_BASE}/api/board/featured/`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) return [];
+  return await res.json();
+}
 
 async function getPopularPosts(): Promise<BoardPost[]> {
   const res = await fetch(`${API_BASE}/api/board/?sort=views&page=1`, {
@@ -41,7 +62,8 @@ async function getLatestFeed(): Promise<FeedPost[]> {
 }
 
 export default async function HomePage() {
-  const [posts, feeds] = await Promise.all([
+  const [featuredPosts, posts, feeds] = await Promise.all([
+    getFeaturedPosts(),
     getPopularPosts(),
     getLatestFeed(),
   ]);
@@ -49,13 +71,13 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
       <div className="mx-auto w-[92%] max-w-5xl py-10 space-y-14">
-        
+        {featuredPosts.length > 0 && (
+          <FeaturedCarousel posts={featuredPosts} />
+        )}
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-           <h2 className="text-[18px] text-[#4f4a45]">
-  Hot Posts ♡
-</h2>
+            <h2 className="text-[18px] text-[#4f4a45]">Hot Posts ♡</h2>
             <Link href="/board" className="text-sm text-[#8b847b] hover:text-[#4f4a45]">
               View all
             </Link>
@@ -68,7 +90,7 @@ export default async function HomePage() {
               {posts.map((post) => (
                 <Link
                   key={post.id}
-                  href={`/board/${post.id}`}
+                  href={`/board/${post.pretty_slug}`}
                   className="block border-b border-[#e8e1d8] pb-3"
                 >
                   <p className="text-[14px] text-[#4f4a45]">{post.title}</p>
@@ -82,8 +104,6 @@ export default async function HomePage() {
         </section>
 
         <HomeFeedSection />
-
-        
       </div>
     </main>
   );

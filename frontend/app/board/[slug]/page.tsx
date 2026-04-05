@@ -19,10 +19,7 @@ async function getPost(slug: string): Promise<BoardDetail | null> {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    return null;
-  }
-
+  if (!res.ok) return null;
   return res.json();
 }
 
@@ -89,14 +86,10 @@ export default async function BoardDetailPage({
       <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
         <div className="mx-auto w-[92%] max-w-5xl py-6 md:w-[86%] md:py-10">
           <div className="mb-8">
-            <Link
-              href="/board"
-              className="block w-fit text-[12px] text-[#8e8a84]"
-            >
+            <Link href="/board" className="block w-fit text-[12px] text-[#8e8a84]">
               ← Back to board
             </Link>
           </div>
-
           <p className="text-sm text-[#948d85]">Post not found.</p>
         </div>
       </main>
@@ -107,10 +100,7 @@ export default async function BoardDetailPage({
     <main className="min-h-screen bg-[#f7f4ee] text-[#5f5a54]">
       <div className="mx-auto w-[92%] max-w-5xl py-6 md:w-[86%] md:py-10">
         <div className="mb-8">
-          <Link
-            href="/board"
-            className="block w-fit text-[12px] text-[#8e8a84]"
-          >
+          <Link href="/board" className="block w-fit text-[12px] text-[#8e8a84]">
             &lt;&lt; BACK TO BOARD
           </Link>
         </div>
@@ -124,11 +114,8 @@ export default async function BoardDetailPage({
             <span className={categoryStyle(post.category)}>
               {categoryLabel(post.category)}
             </span>
-
             <span className="text-[#5f5a54]">{post.author_username}</span>
-
             <span>{formatDate(post.created_at)}</span>
-
             <span className="text-[#b5aea6]">{post.views} views</span>
           </div>
 

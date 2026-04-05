@@ -56,6 +56,7 @@ class BoardPost(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=300, blank=True)
     thumbnail = models.ImageField(upload_to="board_thumbnails/", null=True, blank=True)
+    thumbnail_url = models.URLField(blank=True)
     is_featured = models.BooleanField(default=False)
     body = models.TextField()
     views = models.PositiveIntegerField(default=0)

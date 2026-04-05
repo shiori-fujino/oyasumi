@@ -61,6 +61,9 @@ class BoardListSerializer(serializers.ModelSerializer):
     def get_is_expired(self, obj):
         return obj.is_expired()
     def get_thumbnail(self, obj):
+        if obj.thumbnail_url:
+            return obj.thumbnail_url
+
         request = self.context.get("request")
         if obj.thumbnail:
             if request:
@@ -100,9 +103,14 @@ class BoardDetailSerializer(serializers.ModelSerializer):
     def get_is_expired(self, obj):
         return obj.is_expired()
     def get_thumbnail(self, obj):
+        if obj.thumbnail_url:
+            return obj.thumbnail_url
+
         request = self.context.get("request")
         if obj.thumbnail:
-            return request.build_absolute_uri(obj.thumbnail.url)
+            if request:
+                return request.build_absolute_uri(obj.thumbnail.url)
+            return obj.thumbnail.url
         return None
 
 

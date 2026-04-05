@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.db.models import Q
 from .models import FeedPost, BoardPost, Profile
 from .serializers import (
     FeedPostSerializer,
@@ -30,7 +30,10 @@ from .utils import send_verification_email
 def featured_posts(request):
     posts = (
         BoardPost.objects.public_visible()
-        .filter(is_featured=True, thumbnail__isnull=False)
+        .filter(is_featured=True)
+        .filter(
+            Q(thumbnail__isnull=False) | ~Q(thumbnail_url="")
+        )
         .order_by("-created_at")[:3]
     )
 
@@ -40,6 +43,8 @@ def featured_posts(request):
         context={"request": request},
     )
     return Response(serializer.data)
+
+
 class SignupView(APIView):
     permission_classes = []
 

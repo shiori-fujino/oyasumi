@@ -91,7 +91,7 @@ export default async function HomePage() {
           </div>
 
           {feeds.length === 0 ? (
-            <p className="text-sm text-[#999]">No feed yet.</p>
+            <p className="text-sm text-[#999]">Please log in to check what's HOT today.</p>
           ) : (
             <div className="grid grid-cols-3 gap-2">
               {feeds.map((post) => (

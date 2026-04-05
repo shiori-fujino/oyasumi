@@ -25,6 +25,7 @@ export default function VerifyEmailClient() {
     )
       .then(async (res) => {
         const data = await res.json();
+        console.log("verify response:", data);
 
         if (!res.ok) {
           setMessage(data.error || "Verification failed.");
@@ -33,6 +34,7 @@ export default function VerifyEmailClient() {
 
         if (data.token) {
           localStorage.setItem("token", data.token);
+          console.log("saved token:", localStorage.getItem("token"));
         }
 
         if (data.username) {
@@ -49,7 +51,8 @@ export default function VerifyEmailClient() {
           router.push("/");
         }, 800);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         setMessage("Network error.");
       });
   }, [uid, token, router]);

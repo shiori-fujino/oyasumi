@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { API_BASE } from "@/lib/api";
+import HomeFeedSection from "./HomeFeedSection";
 
 type BoardPost = {
   id: number;
@@ -80,41 +81,7 @@ export default async function HomePage() {
           )}
         </section>
 
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-           <h2 className="text-[18px] text-[#4f4a45]">
-  New Feed ♡
-</h2>
-            <Link href="/feed" className="text-sm text-[#8b847b] hover:text-[#4f4a45]">
-              View all
-            </Link>
-          </div>
-
-          {feeds.length === 0 ? (
-            <p className="text-sm text-[#999]">
-  Please{" "}
-  <Link href="/login" className="underline hover:text-[#4f4a45]">
-    log in
-  </Link>{" "}
-  to check what's HOT today.
-</p>
-          ) : (
-            <div className="grid grid-cols-3 gap-2">
-              {feeds.map((post) => (
-                <div
-                  key={post.id}
-                  className="aspect-square overflow-hidden bg-[#eee]"
-                >
-                  <img
-                    src={post.image}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <HomeFeedSection />
 
         
       </div>

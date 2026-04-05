@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "core",
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://www.oyasumi-club.xyz",
+    "https://oyasumi-club.xyz",
+    "https://api.oyasumi-club.xyz",
+]
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",

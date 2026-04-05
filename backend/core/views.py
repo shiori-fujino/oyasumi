@@ -32,15 +32,26 @@ class SignupView(APIView):
 
     def post(self, request):
         print("=== SignupView hit ===")
+
         serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        print("=== about to send email ===")
-        send_verification_email(user)
-        print("=== email function returned ===")
+        user = serializer.save(is_active=False)
+
+        try:
+            send_verification_email(user)
+        except Exception as e:
+            print("=== verification email failed ===")
+            print(repr(e))
+            return Response(
+                {
+                    "message": "Account created, but verification email could not be sent.",
+                    "error": str(e),
+                },
+                status=status.HTTP_201_CREATED,
+            )
 
         return Response(
-            {"message": "Signup successful. Please check your email to verify your account."},
+            {"message": "Signup successful. Please check your email."},
             status=status.HTTP_201_CREATED,
         )
 
